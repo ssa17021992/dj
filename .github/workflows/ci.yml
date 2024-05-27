@@ -27,3 +27,13 @@ jobs:
         name: Test Docker image
         with:
           tag: "app:1.0"
+      - uses: azure/login@v2
+        name: Azure CLI login
+        with:
+          creds: '{"clientId":"${{ secrets.AZ_USERNAME }}","clientSecret":"${{ secrets.AZ_PASSWORD }}","tenantId":"${{ secrets.AZ_TENANT }}"}'
+      - name: Azure CLI version
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
