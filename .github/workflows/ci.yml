@@ -29,4 +29,6 @@ jobs:
       #     tag: "app:1.0"
       - name: Azure CLI login
         run: |
-          python --version
+          python -m pip install -U pip
+          python -m pip install azure-cli
+          az --version
