@@ -15,8 +15,6 @@ jobs:
   build_docker_image_job:
     runs-on: ubuntu-latest
     steps:
-      - env:
-          TAG: ${{ inputs.tag }}
       - uses: actions/checkout@v4
       - name: Build Docker image ${{ inputs.tag }}
         run: |
