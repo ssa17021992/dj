@@ -13,4 +13,4 @@ runs:
     - name: Test Docker image ${{ inputs.tag }}
       shell: bash
       run: |
-        docker container run -it --rm --env ENV="test" ${{ inputs.tag }}
+        docker container run --rm --env ENV="test" ${{ inputs.tag }}
