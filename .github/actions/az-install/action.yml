@@ -8,5 +8,4 @@ runs:
       shell: bash
       run: |
         python -m pip install -U pip
-        python -m pip install azure-cli
-        az --version
+        python -m pip install azure-cli==2.61.0
