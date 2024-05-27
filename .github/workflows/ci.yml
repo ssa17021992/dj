@@ -28,7 +28,7 @@ jobs:
       #     tag: "app:1.0"
       - uses: ./.github/actions/az-install
       - uses: ./.github/actions/az-login
-        with:
+        secrets:
           username: ${{ secrets.AZ_USERNAME }}
           password: ${{ secrets.AZ_PASSWORD }}
           tenant: ${{ secrets.AZ_TENANT }}
