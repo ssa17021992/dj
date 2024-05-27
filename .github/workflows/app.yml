@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.ref }} != "refs/heads/abc"
+    # if: ${{ github.ref }} != "refs/heads/abc"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
