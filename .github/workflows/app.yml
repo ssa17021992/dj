@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checjout
-      - uses: ./.github/actions/build-docker-image.yml
+      - uses: ./.github/actions/build-docker-image
         name: Build Docker image
         with:
           tag: "dj:2.0"

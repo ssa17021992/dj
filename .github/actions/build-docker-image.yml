@@ -1,21 +1,16 @@
-on:
-  workflow_call:
-    inputs:
-      tag:
-        required: false
-        default: "app:1.0"
-        type: string
-    secrets:
-      secret-key:
-        required: false
-        default: "123"
-        type: string
+name: "Build Docker image"
+description: "Build Docker image"
 
-jobs:
+inputs:
+  tag:
+    required: false
+    default: "app:1.0"
+    type: string
+
+runs:
   build-docker-image:
-    runs-on: ubuntu-latest
+    using: "composite"
     steps:
-      # - uses: actions/checkout@v4
       - name: Build Docker image ${{ inputs.tag }}
         run: |
           echo "Building Docker image... $TAG - ${{ inputs.tag }}"
