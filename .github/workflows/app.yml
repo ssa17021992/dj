@@ -17,6 +17,7 @@ jobs:
     # if: ${{ github.ref }} != "refs/heads/abc"
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/workflows/build-docker-image.yml
         with:
           tag: "dj:2.0"
