@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        name: Checjout
+        name: Checkout
       - uses: ./.github/actions/build-docker-image
         name: Build Docker image
         with:
@@ -30,7 +30,7 @@ jobs:
       - uses: azure/login@v2
         name: Azure CLI login
         with:
-          creds: '{"clientId":"${{ secrets.AZ_USERNAME }}","clientSecret":"${{ secrets.AZ_PASSWORD }}","tenantId":"${{ secrets.AZ_TENANT }}"}'
+          creds: '{"appId":"${{ secrets.AZ_USERNAME }}","password":"${{ secrets.AZ_PASSWORD }}","tenant":"${{ secrets.AZ_TENANT }}"}'
       - name: Azure CLI version
         uses: azure/cli@v2
         with:
