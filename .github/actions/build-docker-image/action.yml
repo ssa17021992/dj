@@ -13,4 +13,4 @@ runs:
     - name: Build Docker image ${{ inputs.tag }}
       shell: bash
       run: |
-        echo "Building Docker image... ${{ inputs.tag }}"
+        docker image build --tag ${{ inputs.tag }} .
