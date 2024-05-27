@@ -15,6 +15,7 @@ jobs:
   build_docker_image_job:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Build Docker image ${{ inputs.tag }}
         run: |
           echo "Building Docker image... $TAG - ${{ inputs.tag }}"
