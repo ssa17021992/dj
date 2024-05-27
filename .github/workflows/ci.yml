@@ -18,15 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        name: Checkout
-      - uses: ./.github/actions/build-docker-image
-        name: Build Docker image
-        with:
-          tag: "app:1.0"
-      - uses: ./.github/actions/test-docker-image
-        name: Test Docker image
-        with:
-          tag: "app:1.0"
       - uses: azure/login@v2
         name: Azure CLI login
         with:
@@ -37,3 +28,12 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az account show
+        name: Checkout
+      - uses: ./.github/actions/build-docker-image
+        name: Build Docker image
+        with:
+          tag: "app:1.0"
+      - uses: ./.github/actions/test-docker-image
+        name: Test Docker image
+        with:
+          tag: "app:1.0"
