@@ -1,14 +1,14 @@
 name: "Login Azure CLI"
 description: "Login Azure CLI"
 
-secrets:
+inputs:
   username:
     required: true
     type: string
   password:
     required: true
     type: string
-  tenant:
+  username:
     required: true
     type: string
 
@@ -20,6 +20,6 @@ runs:
       run: |
         az login \
           --service-principal \
-          --username "${{ secrets.username }}" \
-          --password "${{ secrets.password }}" \
-          --tenant "${{ secrets.tenant }}"
+          --username "${{ inputs.username }}" \
+          --password "${{ inputs.password }}" \
+          --tenant "${{ inputs.tenant }}"
