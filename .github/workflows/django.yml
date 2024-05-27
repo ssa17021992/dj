@@ -14,26 +14,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.11]
-
     steps:
     - uses: actions/checkout@v4
-    - name: Show docker version
+    - name: Build Docker image
       run: |
-        docker --version
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+        docker image build --tag dj:1.0
+    - name: Test Docker image
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install -r requirements/base.freeze.txt
-    - name: Run tests
-      run: |
-        python manage.py test --settings tests.settings --keepdb -v2 tests
+        docker container run -it --rm --name dj --env ENV="test" dj:1.0
