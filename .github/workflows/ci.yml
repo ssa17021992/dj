@@ -30,7 +30,7 @@ jobs:
       - uses: azure/login@v2
         name: Azure CLI login
         with:
-          creds: '{"appId":"${{ secrets.AZ_USERNAME }}","password":"${{ secrets.AZ_PASSWORD }}","tenant":"${{ secrets.AZ_TENANT }}"}'
+          creds: ${{ secrets.AZ_CREDENTIALS }}
       - name: Azure CLI version
         uses: azure/cli@v2
         with:
