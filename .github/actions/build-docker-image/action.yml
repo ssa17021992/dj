@@ -8,9 +8,8 @@ inputs:
     type: string
 
 runs:
-  build-docker-image:
-    using: "composite"
-    steps:
-      - name: Build Docker image ${{ inputs.tag }}
-        run: |
-          echo "Building Docker image... $TAG - ${{ inputs.tag }}"
+  using: "composite"
+  steps:
+    - name: Build Docker image ${{ inputs.tag }}
+      run: |
+        echo "Building Docker image... $TAG - ${{ inputs.tag }}"
