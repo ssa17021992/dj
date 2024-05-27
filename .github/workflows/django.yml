@@ -22,4 +22,4 @@ jobs:
         docker image build --tag dj:1.0 .
     - name: Test Docker image
       run: |
-        docker container run -it --rm --name dj --env ENV="test" dj:1.0
+        docker container run --rm --name dj --env ENV="test" dj:1.0
