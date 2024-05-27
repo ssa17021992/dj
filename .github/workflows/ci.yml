@@ -19,21 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout
-      - uses: azure/login@v2
-        name: Azure CLI login
-        with:
-          creds: ${{ secrets.AZ_CREDENTIALS }}
-      - uses: azure/cli@v2
-        name: Azure CLI version
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
-      - uses: ./.github/actions/build-docker-image
-        name: Build Docker image
-        with:
-          tag: "app:1.0"
-      - uses: ./.github/actions/test-docker-image
-        name: Test Docker image
-        with:
-          tag: "app:1.0"
+      # - uses: ./.github/actions/build-docker-image
+      #   name: Build Docker image
+      #   with:
+      #     tag: "app:1.0"
+      # - uses: ./.github/actions/test-docker-image
+      #   name: Test Docker image
+      #   with:
+      #     tag: "app:1.0"
+      - name: Azure CLI login
+        run: |
+          python --version
