@@ -22,7 +22,8 @@ jobs:
       - uses: ./.github/actions/build-docker-image
         name: Build Docker image
         with:
-          tag: "dj:2.0"
-      - name: Test Docker image
-        run: |
-          docker container run --rm --env ENV="test" dj:2.0
+          tag: "app:1.0"
+      - uses: ./.github/actions/test-docker-image
+        name: Test Docker image
+        with:
+          tag: "app:1.0"
