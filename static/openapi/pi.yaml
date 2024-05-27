@@ -1,0 +1,1365 @@
+openapi: 3.0.0
+info:
+  title: PI
+  description: REST API.
+  version:
+
+servers:
+  - url: '{protocol}://{host}:{port}/pi/{version}'
+    variables:
+      protocol:
+        default: http
+        enum:
+          - http
+          - https
+      host:
+        default: localhost
+        enum:
+          - api.example.com
+          - api-stage.example.com
+          - api-dev.example.com
+          - localhost
+      port:
+        default: '2000'
+        enum:
+          - '80'
+          - '443'
+          - '8000'
+          - '2000'
+      version:
+        default: v1
+        enum:
+          - v1
+          - v2
+
+components:
+  securitySchemes:
+    TokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TimeZone:
+      in: header
+      name: X-Time-Zone
+      schema:
+        type: string
+        default: America/Mexico_City
+        enum:
+          - Africa/Lagos
+          - America/Mexico_City
+          - Asia/Tokyo
+          - Europe/Moscow
+          - Europe/Paris
+          - US/Alaska
+          - US/Hawaii
+      description: Time zone
+    UserId:
+      in: path
+      name: userId
+      schema:
+        type: string
+      required: true
+      description: User ID
+    NoteId:
+      in: path
+      name: noteId
+      schema:
+        type: string
+      required: true
+      description: Note ID
+    CommentId:
+      in: path
+      name: commentId
+      schema:
+        type: string
+      required: true
+      description: Comment ID
+    PaginationSize:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        default: 50
+      description: Pagination size
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+      description: Pagination page
+    PaginationCursor:
+      in: query
+      name: cursor
+      schema:
+        type: string
+      description: Pagination cursor
+    QueryFields:
+      in: query
+      name: fields
+      schema:
+        type: string
+      description: Query fields
+    Search:
+      in: query
+      name: search
+      schema:
+        type: string
+      description: Search
+  requestBodies:
+    SignupSendToken:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SignupSendToken'
+    Signup:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Signup'
+    Signin:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Signin'
+    SocialSignin:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SocialSignin'
+    CreateUser:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateUser'
+    UpdateUser:
+      content:
+        application/json:
+          schema:
+            $ref: '#components/schemas/UpdateUser'
+    ChangeAvatar:
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/ChangeAvatar'
+    EnableTFA:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnableTFA'
+    DisableTFA:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DisableTFA'
+    ChangePassword:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChangePassword'
+    PasswdSendToken:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswdSendToken'
+    PasswdReset:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PasswdReset'
+    CreateNote:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateNote'
+    UpdateNote:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateNote'
+    CreateComment:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateComment'
+    UpdateComment:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateComment'
+    Echo:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Echo'
+  responses:
+    Unauthorized:
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Unauthorized'
+    Forbidden:
+      description: FORBIDDEN
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+    BadRequest:
+      description: BAD_REQUEST
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BadRequest'
+    Ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+    Created:
+      description: CREATED
+      content:
+        application/json:
+          schema:
+            type: object
+    NoContent:
+      description: NO_CONTENT
+      content:
+        application/json:
+          schema:
+            type: object
+    SigninOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SigninOk'
+    RefreshTokenOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RefreshTokenOk'
+    EnableTFAOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EnableTFAOk'
+    DisableTFAOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DisableTFAOk'
+    UserCreated:
+      description: CREATED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    UserOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    UsersOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CursorPagination'
+              - type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+    CommentCreated:
+      description: CREATED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Comment'
+    CommentOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Comment'
+    CommentsOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CursorPagination'
+              - type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+    NoteCreated:
+      description: CREATED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Note'
+    NoteOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Note'
+    NotesOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CursorPagination'
+              - type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Note'
+    FruitsOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/PageNumberPagination'
+              - type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Fruit'
+    LocaltimeOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              localtime:
+                type: string
+                format: date-time
+    EchoOk:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Echo'
+  schemas:
+    Unauthorized:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                default: auth
+              message:
+                type: string
+                default: No credentials provided.
+    Forbidden:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                default: perm
+              message:
+                type: string
+                default: Permission denied.
+    BadRequest:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                default: name
+              message:
+                type: string
+                default: This field is required.
+    SignupSendToken:
+      type: object
+      properties:
+        username:
+          type: string
+          default: user
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          default: '5500000000'
+    Signup:
+      type: object
+      properties:
+        password:
+          type: string
+          default: p455w0rd
+    Signin:
+      type: object
+      properties:
+        username:
+          type: string
+          default: user
+        password:
+          type: string
+          default: p455w0rd
+      required:
+        - username
+        - password
+    SocialSignin:
+      type: object
+      properties:
+        social:
+          type: string
+          default: dummy
+          enum:
+            - dummy
+            - facebook
+            - google
+        token:
+          type: string
+          default: GHL2FeQf8wcMA2cF8XTHot9f9ma
+      required:
+        - social
+        - token
+    CreateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          default: 'user'
+        password:
+          type: string
+          default: 'p455w0rd'
+    UpdateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          default: 'User'
+        middle_name:
+          type: string
+          default: 'User'
+        last_name:
+          type: string
+          default: 'User'
+        birthday:
+          type: string
+          format: date
+    ChangeAvatar:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+      required:
+        - avatar
+    EnableTFA:
+      type: object
+      properties:
+        password:
+          type: string
+          default: p455w0rd
+      required:
+        - password
+    DisableTFA:
+      type: object
+      properties:
+        password:
+          type: string
+          default: p455w0rd
+        tfa_code:
+          type: string
+          default: '558394'
+      required:
+        - password
+        - tfa_code
+    ChangePassword:
+      type: object
+      properties:
+        current:
+          type: string
+          default: p455w0rd
+          description: Current password
+        password:
+          type: string
+          default: '12345678'
+          description: New password
+        expire_keys:
+          type: boolean
+          default: false
+          description: Expire all access tokens
+      required:
+        - current
+        - password
+        - expire_keys
+    PasswdSendToken:
+      type: object
+      properties:
+        username:
+          type: string
+          default: user
+      required:
+        - username
+    PasswdReset:
+      type: object
+      properties:
+        password:
+          type: string
+          default: p455w0rd
+      required:
+        - password
+    CreateNote:
+      type: object
+      properties:
+        content:
+          type: string
+          default: '...'
+    UpdateNote:
+      type: object
+      properties:
+        content:
+          type: string
+          default: '...'
+    CreateComment:
+      type: object
+      properties:
+        content:
+          type: string
+          default: '...'
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            first_name:
+              type: string
+              default: ''
+            last_name:
+              type: string
+              default: ''
+    UpdateComment:
+      type: object
+      properties:
+        content:
+          type: string
+          default: '...'
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            first_name:
+              type: string
+              default: ''
+            last_name:
+              type: string
+              default: ''
+    Echo:
+      type: object
+      properties:
+        message:
+          type: string
+          default: '...'
+    SigninOk:
+      type: object
+      properties:
+        token:
+          type: string
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3NTlXMThvaFNOUyIsInR5cCI6ImF1dGgiLCJybmQiOjE2OTM1NTA1MDAsImlhdCI6MTY5MzU1MTAwMCwiZXhwIjoyMDA5Nzc1MDAwfQ.GHL2FeQf8wcMA2cF8XTHot9f9ma_Dptc5lbTsq9ZCc8
+        refresh_token:
+          type: string
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3NTlXMThvaFNOUyIsInR5cCI6ImF1dGhfcmVmcmVzaCIsInJuZCI6MTY5MzU1MDUwMCwiaWF0IjoxNjkzNTUxMDAwLCJleHAiOjIwMDk3NzUwMDB9.XCYE28OUOTxMZRdyueLRYJfS9keEEDxpgPN6B0Cu22w
+        user:
+          $ref: '#/components/schemas/User'
+    RefreshTokenOk:
+      type: object
+      properties:
+        token:
+          type: string
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3NTlXMThvaFNOUyIsInR5cCI6ImF1dGgiLCJybmQiOjE2OTM1NTA1MDAsImlhdCI6MTY5MzU1MTAwMCwiZXhwIjoyMDA5Nzc1MDAwfQ.GHL2FeQf8wcMA2cF8XTHot9f9ma_Dptc5lbTsq9ZCc8
+        user:
+          $ref: '#/components/schemas/User'
+    EnableTFAOk:
+      type: object
+      properties:
+        tfa_secret:
+          type: string
+          default: GXCPRTXOYVQIGLDXA7QO5E3GBGCYWKJ4
+        qr_code:
+          type: string
+          default: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADoElEQVR4nO2cUYrrOBBFb40N+bShF9BLkXfwltT0zuylZAED0mdA5s5HSbKd93oGHg6vk7n1EbodHxRDUaq6VbIRv2fLX78JAiJFihQpUqRIkd+PtGI9bAJgE1bDYmbl2xGwKdW7plPWFPliZCBJRoCfI8A59QCGDCzWg4wAgI4kySP5J36tyG9JphJfbEo9sIwdEa4XAsPNzMZyl5n1560p8jXI/u5/Ir3BAlfjMsGI1ANIfSbSWWuKfHFyGeE7GDBk2AfpweiRa4p8CXIgOQOwachAYAZC7Dz3Ia8X2gSAZD5vTZEvRS5mJe0J1x5AutAzI6RSqwFYvSw7a02RL0J6PrQ1PLi838xLsvLFzVCuHdsiz/WcIh9Hwsv1ELtS289DBuf27YyOZOxIMoOMHV0ImJ/rOUU+jnQf8jwnuPjTERiaX1XPcb8K9T75kMhmm2xYgkws0Wd3rcmLikMif2HuGvNAAkNGDTxA3d+O6nTzJvmQyGr7+BLLNlaiz1bl14reA5TikMiDlagCuKvUdLrbhaVy35YeyYdE7m2/l6F6ydx2tRkofrUlSopDIvdW+2XJiki0/Ii0cL2w/OVXuwyAMAx/S2MUeWds5pGmRJ9uF5sQImrrY1BtL/LeatFVnGb34X6104eaN8mHRO6szX6sBsCAcO2zAW1rGyP9m0CASF22P/drRX5HcqdT75NoD0YZNfBkKA6J/MpqXVaURc+Cth2sJEpNbYzSGEXeW9WHmr/wpxZsNelDIv+VXM3n7z/HemUZAfuITR/izWxKZRrtaZ9T5OnkLg6VNgczDg2PQy+/aNeKQyJ/JoebcW4ziyGuZjau5ik242rk1cxz6rPWFPka5DEf2pobXZsf4k4aqhm34pDIzVwfsvLR0QLX3jBEAFiNSCMY4pvfbeHa1xz7uZ5T5OPINvuBKgO1Qmw/P9Q6+FXAVhwSeSTN3jP8NMdHBGr+XKbzbULHcsQ16by9yHvj0bYpajdPomunVT1XkV+R23s/3Ba7FLH6cwTKyfvU++mzMqb2jM8p8hFkPRtEHnKf2Gqww8SH8iGRX5NbnpMu9EP3rl2Pq5HX3o/CIsRVM2gi/4Nc3jNsaiFoJypWxdqms9cU+VKkTQBck/bXxqCj2VjPKJY5o3PXFPncZM2iBwJIAJH6bBgILD9u5k0QpNFYXkL0pvegibwzz6mLtUMbtbW6O18W6hFX1fYiD2Z6x7lIkSJFihQp8n9O/gMd7FJVYBalfAAAAABJRU5ErkJggg==
+        user:
+          $ref: '#/components/schemas/User'
+    DisableTFAOk:
+      type: object
+      properties:
+        tfa_secret:
+          type: string
+          default: GXCPRTXOYVQIGLDXA7QO5E3GBGCYWKJ4
+        user:
+          $ref: '#/components/schemas/User'
+    PageNumberPagination:
+      type: object
+      properties:
+        count:
+          type: integer
+          default: 1000
+          description: Total count.
+        next:
+          type: string
+          default: https://api.example.com/pi/v1/results?page=5
+          description: Next page link.
+        previous:
+          type: string
+          default: https://api.example.com/pi/v1/results?page=4
+          description: Previous page link.
+        results:
+          type: array
+          items:
+          description: Result list.
+    CursorPagination:
+      type: object
+      properties:
+        next:
+          type: string
+          default: https://api.example.com/pi/v1/results?cursor=cD0tTDhlTVEtdlJhSw%3D%3D
+          description: Next page link.
+        previous:
+          type: string
+          default: null
+          description: Previous page link.
+        results:
+          type: array
+          items:
+          description: Result list.
+    Fruit:
+      type: object
+      properties:
+        id:
+          type: string
+          default: xfV9MZRgRZy
+        name:
+          type: string
+          default: Orange
+        type:
+          type: string
+          default: citrus
+        created:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          default: w59W18ohSNS
+        username:
+          type: string
+          default: user
+        first_name:
+          type: string
+          default: ''
+        middle_name:
+          type: string
+          default: ''
+        last_name:
+          type: string
+          default: ''
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          default: '5500000000'
+        birthday:
+          type: string
+          format: date
+        avatar:
+          type: string
+          default: null
+        last_login:
+          type: string
+          format: date-time
+        tfa_active:
+          type: boolean
+          default: false
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+          default: w59W18ohSNS
+        content:
+          type: string
+          default: '...'
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          default: w59W18ohSNS
+        content:
+          type: string
+          default: '...'
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            first_name:
+              type: string
+              default: ''
+            last_name:
+              type: string
+              default: ''
+        created:
+          type: string
+          format: date-time
+        modified:
+          type: string
+          format: date-time
+
+security:
+  - TokenAuth: []
+
+paths:
+  /accounts/signup/send-token:
+    post:
+      description: Send signup token.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/SignupSendToken'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/signup/check-token:
+    post:
+      description: Check signup token.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/signup:
+    post:
+      description: Signup.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/Signup'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '201':
+          $ref: '#/components/responses/Created'
+  /accounts/signin:
+    post:
+      description: Signin.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/Signin'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/SigninOk'
+  /accounts/social-signin:
+    post:
+      description: Social signin.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/SocialSignin'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/SigninOk'
+  /accounts/me:
+    get:
+      description: Retrieve profile.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+        - $ref: '#/components/parameters/QueryFields'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '200':
+          $ref: '#/components/responses/UserOk'
+    put:
+      description: Update profile.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    patch:
+      description: Update profile.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/me/change-avatar:
+    put:
+      description: Change avatar.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/ChangeAvatar'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    patch:
+      description: Change avatar.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/ChangeAvatar'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/me/refresh-token:
+    post:
+      description: Refresh token.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '200':
+          $ref: '#/components/responses/RefreshTokenOk'
+  /accounts/me/enable-tfa:
+    post:
+      description: Enable TFA.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/EnableTFA'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/EnableTFAOk'
+  /accounts/me/disable-tfa:
+    post:
+      description: Disable TFA.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/DisableTFA'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/DisableTFAOk'
+  /accounts/me/passwd:
+    post:
+      description: Change password.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/ChangePassword'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/me/passwd/send-token:
+    post:
+      description: Send password reset token.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/PasswdSendToken'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/me/passwd/check-token:
+    post:
+      description: Check password reset token.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/me/passwd/reset:
+    post:
+      description: Password reset.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/PasswdReset'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+  /accounts/users:
+    get:
+      description: Retrieve users.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PaginationSize'
+        - $ref: '#/components/parameters/PaginationCursor'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/UsersOk'
+    post:
+      description: Create user.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUser'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '201':
+          $ref: '#/components/responses/UserCreated'
+  /accounts/users/{userId}:
+    get:
+      description: Retrieve user.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/UserOk'
+    put:
+      description: Update user.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/Ok'
+    patch:
+      description: Update user.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUser'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/Ok'
+    delete:
+      description: Delete user.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '204':
+          $ref: '#/components/responses/NoContent'
+  /accounts/comments:
+    get:
+      description: Retrieve comments.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/PaginationSize'
+        - $ref: '#/components/parameters/PaginationCursor'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentsOk'
+    post:
+      description: Create comment.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateComment'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '201':
+          $ref: '#/components/responses/CommentCreated'
+  /accounts/comments/{commentId}:
+    get:
+      description: Retrieve comment.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '200':
+          $ref: '#/components/responses/CommentOk'
+    put:
+      description: Update comment.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateComment'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    patch:
+      description: Update comment.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateComment'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    delete:
+      description: Delete comment.
+      tags:
+        - 'Accounts'
+      parameters:
+        - $ref: '#/components/parameters/CommentId'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+  /accounts/me/notes:
+    get:
+      description: Retrieve notes.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/PaginationSize'
+        - $ref: '#/components/parameters/PaginationCursor'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/NotesOk'
+    post:
+      description: Create note.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateNote'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '201':
+          $ref: '#/components/responses/NoteCreated'
+  /accounts/me/notes/{noteId}:
+    get:
+      description: Retrieve note.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/NoteId'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '200':
+          $ref: '#/components/responses/NoteOk'
+    put:
+      description: Update note.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/NoteId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateNote'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    patch:
+      description: Update note.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/NoteId'
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateNote'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/Ok'
+    delete:
+      description: Delete note.
+      tags:
+        - 'Accounts'
+      security:
+        - TokenAuth: []
+      parameters:
+        - $ref: '#/components/parameters/NoteId'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '204':
+          $ref: '#/components/responses/NoContent'
+  /common/echo:
+    post:
+      description: Echo.
+      tags:
+        - 'Common'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      requestBody:
+        $ref: '#/components/requestBodies/Echo'
+      responses:
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '200':
+          $ref: '#/components/responses/EchoOk'
+  /common/localtime:
+    get:
+      description: Current datetime.
+      tags:
+        - 'Common'
+      parameters:
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '200':
+          $ref: '#/components/responses/LocaltimeOk'
+  /common/fruits:
+    get:
+      description: Retrieve fruits.
+      tags:
+        - 'Common'
+      parameters:
+        - $ref: '#/components/parameters/PaginationSize'
+        - $ref: '#/components/parameters/PaginationPage'
+        - $ref: '#/components/parameters/QueryFields'
+        - $ref: '#/components/parameters/Search'
+        - $ref: '#/components/parameters/TimeZone'
+      responses:
+        '200':
+          $ref: '#/components/responses/FruitsOk'

@@ -1,0 +1,11 @@
+# The uncompromising code formatter.
+black==24.4.2
+
+# A Python utility / library to sort Python imports.
+isort==5.13.2
+
+# The modular source code checker: pep8 pyflakes and co.
+flake8==7.0.0
+
+# A framework for managing and maintaining multi-language pre-commit hooks.
+pre-commit==3.7.0

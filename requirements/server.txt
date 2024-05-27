@@ -1,0 +1,9 @@
+# Gevent: Coroutine Python networking library that uses greenlet to
+# provide a high-level synchronous API on top of the libev or libuv event loop.
+gevent==24.2.1
+
+# uWSGI: The uWSGI server.
+uWSGI==2.0.25.1
+
+# Psycogreen: psycopg2 integration with coroutine libraries.
+psycogreen==1.0.2

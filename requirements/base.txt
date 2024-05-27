@@ -1,0 +1,66 @@
+# Django web framework: High-level Python Web framework
+# that encourages rapid development and clean, pragmatic design.
+Django==5.0.6
+
+Pillow==10.3.0
+tzdata==2024.1
+
+django-filter==24.2
+PyJWT==2.8.0
+
+# Django REST framework: Powerful and flexible toolkit for building Web APIs.
+djangorestframework==3.15.1
+
+# Graphene: Library for building GraphQL schemas/types fast and easily.
+graphene==3.3
+graphene-django==3.2.1
+
+# Django cockroachdb: Django backend for CockroachDB.
+# django-cockroachdb==5.0
+
+# Django cleanup: The django-cleanup app automatically deletes files
+# for FileField, ImageField and subclasses.
+# django-cleanup==8.1.0
+
+# Django storages: Support for many storage backends in Django.
+# django-storages==1.14.2
+# dropbox==11.36.2
+# boto3==1.34.92
+# google-api-core==2.18.0
+# google-cloud-core==2.4.1
+# google-cloud-storage==2.16.0
+
+# Django redis: Full featured redis cache backend for Django.
+# django-redis==5.4.0
+
+# Memcached: Distributed memory object caching system.
+# python-memcached==1.62
+
+# Django channels framework: Project that takes Django
+# and extends its abilities beyond HTTP - to handle WebSockets,
+# chat protocols, IoT protocols, and more.
+channels==4.1.0
+channels-redis==4.2.0
+
+# Celery: Distributed task queue. Celery is an
+# asynchronous task queue/job queue based on distributed message passing.
+celery==5.4.0
+
+# SQLAlchemy: Database Abstraction Library.
+SQLAlchemy==2.0.29
+
+# Redis: In-memory data structure store, used as a database, cache and message broker.
+redis==5.0.4
+hiredis==2.3.2
+
+# Requests: Python HTTP for Humans.
+requests==2.31.0
+
+# PyOTP: Python One Time Password Library.
+pyotp==2.9.0
+
+# QRCode: QR Code image generator.
+qrcode==7.4.2
+
+# Sentry: Error tracking that helps developers monitor and fix crashes in real time.
+# sentry-sdk==2.0.0

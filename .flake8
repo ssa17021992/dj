@@ -1,0 +1,4 @@
+[flake8]
+exclude = .git,*/migrations/*
+extend-ignore = E203,E701
+max-line-length = 88

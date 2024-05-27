@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+    <title>GraphiQL</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBmaWxsPSIjZTEwMDk4Ij48c3R5bGU+c3Zne2ZpbGw6Y29sb3IoZGlzcGxheS1wMyAwLjg4MjQgMCAwLjU5NjEpO308L3N0eWxlPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNTAgNi45MDMwOEw4Ny4zMjMgMjguNDUxNVY3MS41NDg0TDUwIDkzLjA5NjhMMTIuNjc3IDcxLjU0ODRWMjguNDUxNUw1MCA2LjkwMzA4Wk0xNi44NjQ3IDMwLjg2OTNWNjIuNTI1MUw0NC4yNzk1IDE1LjA0MTRMMTYuODY0NyAzMC44NjkzWk01MCAxMy41MDg2TDE4LjM5NzUgNjguMjQ1N0g4MS42MDI1TDUwIDEzLjUwODZaTTc3LjQxNDggNzIuNDMzNEgyMi41ODUyTDUwIDg4LjI2MTNMNzcuNDE0OCA3Mi40MzM0Wk04My4xMzUzIDYyLjUyNTFMNTUuNzIwNSAxNS4wNDE0TDgzLjEzNTMgMzAuODY5M1Y2Mi41MjUxWiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iOS4zMjA5IiByPSI4LjgyIi8+PGNpcmNsZSBjeD0iODUuMjI5MiIgY3k9IjI5LjY2MDUiIHI9IjguODIiLz48Y2lyY2xlIGN4PSI4NS4yMjkyIiBjeT0iNzAuMzM5NiIgcj0iOC44MiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iOTAuNjc5MSIgcj0iOC44MiIvPjxjaXJjbGUgY3g9IjE0Ljc2NTkiIGN5PSI3MC4zMzk2IiByPSI4LjgyIi8+PGNpcmNsZSBjeD0iMTQuNzY1OSIgY3k9IjI5LjY2MDUiIHI9IjguODIiLz48L3N2Zz4=">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/graphiql@3.1.1/graphiql.min.css" integrity="sha256-wTzfn13a+pLMB5rMeysPPR1hO7x0SwSeQI+cnw7VdbE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@graphiql/plugin-explorer@1.0.3/dist/style.css" integrity="sha256-dihQy2mHNADQqxc3xhWK7pH1w4GVvEow7gKjxdWvTgE=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js" integrity="sha256-S0lp+k7zWUMk2ixteM6HZvu8L9Eh//OVrt+ZfbCpmgY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js" integrity="sha256-IXWO0ITNDjfnNXIu5POVfqlgYoop36bDzhodR6LW5Pc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphiql@3.1.1/graphiql.min.js" integrity="sha256-+2N4zAv6Gbe2oG4Uc5O3p1F+eOfdwhGFIBgydyyeHxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@graphiql/plugin-explorer@1.0.3/dist/index.umd.min.js" integrity="sha256-0U60PTNxaTzlINvKGNInBpFGxW2eUXskhfRhoNempsw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/graphql-ws@5.15.0/umd/graphql-ws.min.js" integrity="sha256-s2AzT5X4ELumZedejoVbgthqH9D6gUZ3TmA8UOASQKo=" crossorigin="anonymous"></script>
+    <style>
+    html, body, #app {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      width: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+    (function(
+      document,
+      location,
+      history,
+      React,
+      ReactDOM,
+      GraphiQL,
+      GraphiQLPluginExplorer,
+      graphqlWs
+    ) {
+      const params = {};
+      let state = {};
+
+      function b64encode(s) {
+        const encoder = new TextEncoder();
+        return btoa(String.fromCodePoint(...encoder.encode(s)))
+          .replace(/\+/g, "-").replace(/\//g, "_")
+        ;
+      }
+
+      function b64decode(s) {
+        const decoder = new TextDecoder();
+        return decoder.decode(
+          Uint8Array.from(atob(s.replace(/\-/g, "+").replace(/\_/g, "/")), c => c.codePointAt(0))
+        );
+      }
+
+      function setState(tab) {
+        state.operationName = tab.operationName;
+        state.query = tab.query;
+        state.variables = tab.variables;
+        state.headers = tab.headers;
+        const action = state.operationName || "";
+        const b64 = b64encode(JSON.stringify(state));
+        history.replaceState(null, "", "#action=" + action + "&state=" + b64);
+      }
+
+      for (const param of location.hash.substr(1).split("&")) {
+        const eq = param.indexOf("=");
+        if (eq !== -1) {
+          params[decodeURIComponent(param.slice(0, eq))] = decodeURIComponent(param.slice(eq + 1));
+        }
+      }
+
+      try {
+        state = JSON.parse(b64decode(params.state));
+      } catch (e) {}
+
+      if (state.query === undefined) {
+        try {
+          const ctx = JSON.parse(localStorage.getItem("graphiql:tabState"));
+          setState(ctx.tabs[ctx.activeTabIndex]);
+        } catch (e) {}
+      }
+
+      const fetcher = GraphiQL.createFetcher({
+        url: location.origin + location.pathname,
+        wsClient: graphqlWs.createClient({
+          url: location.origin.replace(/^http/, "ws") + location.pathname,
+          shouldRetry: () => true,
+          lazy: true
+        }),
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}"
+        }
+      });
+      const plugins = [
+        GraphiQLPluginExplorer.explorerPlugin()
+      ];
+
+      function GraphiQLContainer() {
+        const [query, setQuery] = React.useState(state.query);
+        return React.createElement(GraphiQL, {
+          fetcher: fetcher,
+          plugins: plugins,
+          defaultEditorToolsVisibility: false,
+          isHeadersEditorEnabled: true,
+          shouldPersistHeaders: true,
+          onTabChange: ctx => {
+            setState(ctx.tabs[ctx.activeTabIndex]);
+            setQuery(state.query);
+          },
+          operationName: state.operationName,
+          query: query,
+          variables: state.variables,
+          headers: state.headers
+        });
+      }
+
+      ReactDOM.render(
+        React.createElement(GraphiQLContainer), document.getElementById("app")
+      );
+    })(
+      document,
+      window.location,
+      window.history,
+      window.React,
+      window.ReactDOM,
+      window.GraphiQL,
+      window.GraphiQLPluginExplorer,
+      window.graphqlWs
+    );
+    </script>
+  </body>
+</html>

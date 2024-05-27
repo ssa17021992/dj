@@ -1,0 +1,5 @@
+# Psycopg2: Python-PostgreSQL Database Adapter.
+psycopg2==2.9.9
+
+# MySQLClient: Python interface to MySQL.
+# mysqlclient==2.2.4

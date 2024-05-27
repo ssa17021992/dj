@@ -1,0 +1,15 @@
+[run]
+source =
+    conf/
+    apps/
+    apis/
+omit =
+    */migrations/*
+    tests/*
+    runtests.py
+
+[report]
+skip_empty = true
+
+[html]
+skip_empty = true

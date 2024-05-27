@@ -1,0 +1,45 @@
+FROM debian:bookworm-slim AS build
+
+COPY . /app
+WORKDIR /app
+
+RUN apt-get update --yes \
+    && apt-get install --yes build-essential \
+               python3.11 python3.11-venv nginx libpq5 \
+               python3.11-dev libjpeg-dev zlib1g-dev libffi-dev \
+               libssl-dev libpq-dev \
+    && python3.11 -m venv /venv \
+    && . /venv/bin/activate \
+    && pip install --no-cache-dir -U pip \
+    && pip install --no-cache-dir \
+                   -r requirements/base.freeze.txt \
+                   -r requirements/db.freeze.txt \
+                   -r requirements/server.freeze.txt \
+                   -r requirements/ws.freeze.txt \
+    && python manage.py collectstatic --no-input
+
+FROM debian:bookworm-slim AS final
+
+COPY --from=build /venv /venv
+COPY --from=build /app /app
+WORKDIR /app
+
+RUN apt-get update --yes \
+    && apt-get install --yes python3.11 nginx \
+               libpython3.11 libpq5 adduser busybox \
+    && apt-get clean --yes \
+    && ln -s /usr/bin/busybox /usr/bin/wget \
+    && addgroup app \
+    && adduser --shell /bin/bash --disabled-password --ingroup app app \
+    && mkdir /run/nginx \
+    && chown -R app:app /venv \
+    && chown -R app:app /app \
+    && chown -R app:app /run/nginx \
+    && chown -R app:app /var/lib/nginx \
+    && chown -R app:app /var/log/nginx \
+    && chmod 755 /root \
+    && rm -rf /root/.cache /usr/local/share/.cache
+
+EXPOSE 80
+
+CMD ["sh", "init.sh"]

@@ -1,0 +1,19 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% trans 'Password reset' %}</title>
+  </head>
+  <body style="font-family:monospace;margin:0;">
+    <h1 style="background-color:#eaeaea;margin:0;padding:20px;">{% trans 'Password reset' %}</h1>
+    <p style="line-height:1.5;margin:0;padding:10px 20px;word-break:break-all;">
+      <strong>{% trans 'User' %}:</strong> <span>{{ username }}</span>
+    </p>
+    <p style="line-height:1.5;margin:0;padding:0 20px 20px;word-break:break-all;">
+      <strong>{% trans 'URL' %}:</strong> <span>{{ url }}</span>
+    </p>
+  </body>
+</html>

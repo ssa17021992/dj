@@ -1,0 +1,2 @@
+# Coverage: Coverage.py measures code coverage, typically during test execution.
+coverage==7.5.0

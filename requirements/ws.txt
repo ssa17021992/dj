@@ -1,0 +1,11 @@
+# Uvicorn: The lightning-fast ASGI server.
+uvicorn==0.29.0
+
+# Uvloop: Fast implementation of asyncio event loop on top of libuv.
+uvloop==0.19.0
+
+# Httptools: A collection of framework independent HTTP protocol utils.
+httptools==0.6.1
+
+# Websockets: An implementation of the WebSocket Protocol (RFC 6455 & 7692).
+websockets==12.0
