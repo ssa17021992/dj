@@ -17,13 +17,13 @@ jobs:
     if: ${{ github.ref }} != "refs/heads/abc"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: .github/workflows/build-docker-image
-      with:
-        tag: "dj:2.0"
-    - name: Build Docker image
-      run: |
-        docker image build --tag dj:2.0 .
-    - name: Test Docker image
-      run: |
-        docker container run --rm --env ENV="test" dj:2.0
+      - uses: actions/checkout@v4
+      - uses: .github/workflows/build-docker-image
+        with:
+          tag: "dj:2.0"
+      - name: Build Docker image
+        run: |
+          docker image build --tag dj:2.0 .
+      - name: Test Docker image
+        run: |
+          docker container run --rm --env ENV="test" dj:2.0
