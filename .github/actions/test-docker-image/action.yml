@@ -1,0 +1,16 @@
+name: "Test Docker image"
+description: "Test Docker image"
+
+inputs:
+  tag:
+    required: false
+    default: "app:1.0"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Test Docker image ${{ inputs.tag }}
+      shell: bash
+      run: |
+        docker container run -it --rm --env ENV="test" ${{ inputs.tag }}
