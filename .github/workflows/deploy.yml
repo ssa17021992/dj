@@ -38,8 +38,6 @@ jobs:
         with:
           image-tag: ${{ inputs.image-tag }}
       - uses: ./.github/actions/az-install
-        with:
-          version: "2.60.0"
       - uses: ./.github/actions/az-login
         with:
           username: ${{ secrets.az-username }}
