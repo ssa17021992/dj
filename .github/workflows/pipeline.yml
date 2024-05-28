@@ -14,35 +14,44 @@ on:
 
 jobs:
   deploy-main:
-    if: ${{ github.ref }} == "refs/heads/main"
+    if: ${{ github.head_ref }} == "main"
     runs-on: ubuntu-latest
+    env:
+      AZ_USERNAME: ${{ secrets.AZ_USERNAME }}
+      AZ_PASSWORD: ${{ secrets.AZ_PASSWORD }}
+      AZ_TENANT: ${{ secrets.AZ_TENANT }}
+      RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP || "DEVOP" }}
+      ACR_NAME: ${{ vars.ACR_NAME || "conapi3bmicroservice" }}
+      CONTAINERAPP_NAME: ${{ vars.CONTAINERAPP_NAME || "app" }}
+      CONTAINERAPPJOB_NAME: ${{ vars.CONTAINERAPPJOB_NAME || "app" }}
+      IMAGE_TAG: app:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-build-image
         with:
-          tag: "app:1.0"
+          tag: ${{ env.IMAGE_TAG }}
       - uses: ./.github/actions/docker-test-image
         with:
-          tag: "app:1.0"
+          tag: ${{ env.IMAGE_TAG }}
       - uses: ./.github/actions/az-install
       - uses: ./.github/actions/az-login
         with:
-          username: ${{ secrets.AZ_USERNAME }}
-          password: ${{ secrets.AZ_PASSWORD }}
-          tenant: ${{ secrets.AZ_TENANT }}
+          username: ${{ env.AZ_USERNAME }}
+          password: ${{ env.AZ_PASSWORD }}
+          tenant: ${{ env.AZ_TENANT }}
       - uses: ./.github/actions/az-acr-push-image
         with:
-          acr-name: "conapi3bmicroservice"
-          acr-image-tag: "app:1.0"
-      #- uses: ./.github/actions/az-containerapp-set-image
-      #  with:
-      #    containerapp-resource-group: "DEVOP"
-      #    containerapp-name: "app"
-      #    acr-name: "conapi3bmicroservice"
-      #    acr-image-tag: "app:1.0"
+          acr-name: ${{ env.ACR_NAME }}
+          acr-image-tag: ${{ env.IMAGE_TAG }}
+      - uses: ./.github/actions/az-containerapp-set-image
+        with:
+          containerapp-resource-group: ${{ env.RESOURCE_GROUP }}
+          containerapp-name: ${{ env.CONTAINERAPP_NAME }}
+          acr-name: ${{ env.ACR_NAME }}
+          acr-image-tag: ${{ env.IMAGE_TAG }}
       - uses: ./.github/actions/az-containerappjob-set-image
         with:
-          containerappjob-resource-group: "DEVOP"
-          containerappjob-name: "app"
-          acr-name: "conapi3bmicroservice"
-          acr-image-tag: "app:1.0"
+          containerappjob-resource-group: ${{ env.RESOURCE_GROUP }}
+          containerappjob-name: ${{ env.CONTAINERAPPJOB_NAME }}
+          acr-name: ${{ env.ACR_NAME }}
+          acr-image-tag: ${{ env.IMAGE_TAG }}
