@@ -15,14 +15,14 @@ runs:
     - name: Push Docker image to Azure container registry
       shell: bash
       run: |
-            az acr login --name ${{ inputs.acr-name }}
-            docker image tag \
-              ${{ inputs.acr-image-tag }} \
-              ${{ inputs.acr-name }}.azurecr.io/${{ inputs.acr-image-tag }}
-            docker image push \
-              ${{ inputs.acr-name }}.azurecr.io/${{ inputs.acr-image-tag }}
-            docker image tag \
-              ${{ inputs.acr-image-tag }} \
-              ${{ inputs.acr-name }}.azurecr.io/$(echo -n ${{ inputs.acr-image-tag }} | cut -d":" -f1):latest
-            docker image push \
-              ${{ inputs.acr-name }}.azurecr.io/$(echo -n ${{ inputs.acr-image-tag }} | cut -d":" -f1):latest
+        az acr login --name ${{ inputs.acr-name }}
+        docker image tag \
+          ${{ inputs.acr-image-tag }} \
+          ${{ inputs.acr-name }}.azurecr.io/${{ inputs.acr-image-tag }}
+        docker image push \
+          ${{ inputs.acr-name }}.azurecr.io/${{ inputs.acr-image-tag }}
+        docker image tag \
+          ${{ inputs.acr-image-tag }} \
+          ${{ inputs.acr-name }}.azurecr.io/$(echo -n ${{ inputs.acr-image-tag }} | cut -d":" -f1):latest
+        docker image push \
+          ${{ inputs.acr-name }}.azurecr.io/$(echo -n ${{ inputs.acr-image-tag }} | cut -d":" -f1):latest
