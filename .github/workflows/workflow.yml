@@ -1,16 +1,8 @@
 name: Workflow
 
 on:
-  push:
-    branches:
-      - main
-      - staging
-      - develop
-  pull_request:
-    branches:
-      - main
-      - staging
-      - develop
+  - push
+  - pull_request
 
 jobs:
   dev:
@@ -18,37 +10,37 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-dev:${{ github.sha }}
-      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+      resource-group: ${{ vars.DEVELOP_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.DEVELOP_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.DEVELOP_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.DEVELOP_CONTAINERAPPJOB_NAME || 'app' }}
     secrets:
-      az-username: ${{ secrets.AZ_USERNAME }}
-      az-password: ${{ secrets.AZ_PASSWORD }}
-      az-tenant: ${{ secrets.AZ_TENANT }}
+      az-username: ${{ secrets.DEVELOP_AZ_USERNAME }}
+      az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
   stage:
     if: ${{ github.head_ref }} == 'staging'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-stage:${{ github.sha }}
-      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+      resource-group: ${{ vars.STAGING_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.STAGING_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.STAGING_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.STAGING_CONTAINERAPPJOB_NAME || 'app' }}
     secrets:
-      az-username: ${{ secrets.AZ_USERNAME }}
-      az-password: ${{ secrets.AZ_PASSWORD }}
-      az-tenant: ${{ secrets.AZ_TENANT }}
+      az-username: ${{ secrets.STAGING_AZ_USERNAME }}
+      az-password: ${{ secrets.STAGING_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.STAGING_AZ_TENANT }}
   main:
     if: ${{ github.head_ref }} == 'main'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-main:${{ github.sha }}
-      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+      resource-group: ${{ vars.MAIN_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.MAIN_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.MAIN_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.MAIN_CONTAINERAPPJOB_NAME || 'app' }}
     secrets:
-      az-username: ${{ secrets.AZ_USERNAME }}
-      az-password: ${{ secrets.AZ_PASSWORD }}
-      az-tenant: ${{ secrets.AZ_TENANT }}
+      az-username: ${{ secrets.MAIN_AZ_USERNAME }}
+      az-password: ${{ secrets.MAIN_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.MAIN_AZ_TENANT }}
