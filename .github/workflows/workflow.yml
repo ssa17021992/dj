@@ -1,0 +1,54 @@
+name: Workflow
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - main
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
+
+jobs:
+  develop:
+    if: github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: app-dev:${{ github.sha }}
+      resource-group: ${{ vars.DEVELOP_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.DEVELOP_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.DEVELOP_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.DEVELOP_CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.DEVELOP_AZ_USERNAME }}
+      az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
+  staging:
+    if: github.ref == 'refs/heads/staging'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: app-stage:${{ github.sha }}
+      resource-group: ${{ vars.STAGING_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.STAGING_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.STAGING_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.STAGING_CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.STAGING_AZ_USERNAME }}
+      az-password: ${{ secrets.STAGING_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.STAGING_AZ_TENANT }}
+  main:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: app-main:${{ github.sha }}
+      resource-group: ${{ vars.MAIN_RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.MAIN_ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.MAIN_CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.MAIN_CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.MAIN_AZ_USERNAME }}
+      az-password: ${{ secrets.MAIN_AZ_PASSWORD }}
+      az-tenant: ${{ secrets.MAIN_AZ_TENANT }}

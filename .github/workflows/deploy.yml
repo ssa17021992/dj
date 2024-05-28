@@ -1,0 +1,61 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      image-tag:
+        required: true
+        type: string
+      resource-group:
+        required: true
+        type: string
+      acr-name:
+        required: true
+        type: string
+      containerapp-name:
+        required: true
+        type: string
+      containerappjob-name:
+        required: true
+        type: string
+    secrets:
+      az-username:
+        required: true
+      az-password:
+        required: true
+      az-tenant:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/docker-build-image
+        with:
+          image-tag: ${{ inputs.image-tag }}
+      - uses: ./.github/actions/docker-test-image
+        with:
+          image-tag: ${{ inputs.image-tag }}
+      - uses: ./.github/actions/az-install
+      - uses: ./.github/actions/az-login
+        with:
+          username: ${{ secrets.az-username }}
+          password: ${{ secrets.az-password }}
+          tenant: ${{ secrets.az-tenant }}
+      - uses: ./.github/actions/az-acr-push-image
+        with:
+          acr-name: ${{ inputs.acr-name }}
+          acr-image-tag: ${{ inputs.image-tag }}
+      - uses: ./.github/actions/az-containerapp-set-image
+        with:
+          containerapp-resource-group: ${{ inputs.resource-group }}
+          containerapp-name: ${{ inputs.containerapp-name }}
+          acr-name: ${{ inputs.acr-name }}
+          acr-image-tag: ${{ inputs.image-tag }}
+      - uses: ./.github/actions/az-containerappjob-set-image
+        with:
+          containerappjob-resource-group: ${{ inputs.resource-group }}
+          containerappjob-name: ${{ inputs.containerappjob-name }}
+          acr-name: ${{ inputs.acr-name }}
+          acr-image-tag: ${{ inputs.image-tag }}

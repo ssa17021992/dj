@@ -1,0 +1,27 @@
+name: "Set Docker image to ContainerAppJob deployment"
+description: "Set Docker image to ContainerAppJob deployment"
+
+inputs:
+  containerappjob-resource-group:
+    required: true
+    type: string
+  containerappjob-name:
+    required: true
+    type: string
+  acr-name:
+    required: true
+    type: string
+  acr-image-tag:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set Docker image to ContainerAppJob deployment
+      shell: bash
+      run: |
+        az containerapp job update \
+          --name ${{ inputs.containerappjob-name }} \
+          --resource-group ${{ inputs.containerappjob-resource-group }} \
+          --image ${{ inputs.acr-name }}.azurecr.io/${{ inputs.acr-image-tag }}
