@@ -33,11 +33,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/docker-build-image
         with:
-          tag: ${{ inputs.image-tag }}
+          image-tag: ${{ inputs.image-tag }}
       - uses: ./.github/actions/docker-test-image
         with:
-          tag: ${{ inputs.image-tag }}
+          image-tag: ${{ inputs.image-tag }}
       - uses: ./.github/actions/az-install
+        with:
+          version: "2.60.0"
       - uses: ./.github/actions/az-login
         with:
           username: ${{ secrets.az-username }}
