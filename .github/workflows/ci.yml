@@ -13,19 +13,17 @@ on:
       - develop
 
 jobs:
-  build:
+  build-and-test-image:
     if: ${{ github.ref }} == "refs/heads/main"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # - uses: ./.github/actions/build-docker-image
-      #   name: Build Docker image
-      #   with:
-      #     tag: "app:1.0"
-      # - uses: ./.github/actions/test-docker-image
-      #   name: Test Docker image
-      #   with:
-      #     tag: "app:1.0"
+      - uses: ./.github/actions/build-docker-image
+        with:
+          tag: "app:1.0"
+      - uses: ./.github/actions/test-docker-image
+        with:
+          tag: "app:1.0"
       - uses: ./.github/actions/az-install
       - uses: ./.github/actions/az-login
         with:
