@@ -14,7 +14,7 @@ on:
 
 jobs:
   dev:
-    if: github.head_ref == 'develop'
+    if: github.ref == 'refs/heads/develop'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-dev:${{ github.sha }}
@@ -27,7 +27,7 @@ jobs:
       az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
       az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
   stage:
-    if: github.head_ref == 'staging'
+    if: github.ref == 'refs/heads/staging'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-stage:${{ github.sha }}
@@ -40,7 +40,7 @@ jobs:
       az-password: ${{ secrets.STAGING_AZ_PASSWORD }}
       az-tenant: ${{ secrets.STAGING_AZ_TENANT }}
   main:
-    if: github.head_ref == 'main'
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-main:${{ github.sha }}
