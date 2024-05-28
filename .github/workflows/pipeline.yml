@@ -34,3 +34,9 @@ jobs:
         with:
           acr-name: "conapi3bmicroservice"
           acr-image-tag: "app:1.0"
+      - uses: ./.github/actions/az-containerapp-set-image
+        with:
+          containerapp-resource-group: "DEVOP"
+          containerapp-name: "app"
+          acr-name: "conapi3bmicroservice"
+          acr-image-tag: "app:1.0"
