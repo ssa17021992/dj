@@ -13,7 +13,7 @@ runs:
     - name: Test Docker image ${{ inputs.tag }}
       shell: bash
       run: |
-        docker compose up postgres sqlany12 --detach --wait
+        docker compose up postgres redis rabbitmq --detach --wait
         sleep 5
         echo $(docker compose up test-image) | grep -q "test-image-1 exited with code 0" || exit 1
         docker compose down
