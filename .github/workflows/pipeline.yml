@@ -20,10 +20,10 @@ jobs:
       AZ_USERNAME: ${{ secrets.AZ_USERNAME }}
       AZ_PASSWORD: ${{ secrets.AZ_PASSWORD }}
       AZ_TENANT: ${{ secrets.AZ_TENANT }}
-      RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP || "DEVOP" }}
-      ACR_NAME: ${{ vars.ACR_NAME || "conapi3bmicroservice" }}
-      CONTAINERAPP_NAME: ${{ vars.CONTAINERAPP_NAME || "app" }}
-      CONTAINERAPPJOB_NAME: ${{ vars.CONTAINERAPPJOB_NAME || "app" }}
+      RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
+      ACR_NAME: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
+      CONTAINERAPP_NAME: ${{ vars.CONTAINERAPP_NAME || 'app' }}
+      CONTAINERAPPJOB_NAME: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
       IMAGE_TAG: app:${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
