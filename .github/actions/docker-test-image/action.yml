@@ -13,4 +13,7 @@ runs:
     - name: Test Docker image ${{ inputs.tag }}
       shell: bash
       run: |
-        docker container run --rm --env ENV="test" ${{ inputs.tag }}
+        docker compose up postgres sqlany12 --detach --wait
+        sleep 5
+        echo $(docker compose up test-image) | grep -q "test-image-1 exited with code 0" || exit 1
+        docker compose down
