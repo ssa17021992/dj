@@ -1,12 +1,20 @@
 name: Workflow
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - develop
+      - staging
+      - main
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
 
 jobs:
   dev:
-    if: ${{ github.head_ref }} == 'develop'
+    if: github.head_ref == 'develop'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-dev:${{ github.sha }}
@@ -19,7 +27,7 @@ jobs:
       az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
       az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
   stage:
-    if: ${{ github.head_ref }} == 'staging'
+    if: github.head_ref == 'staging'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-stage:${{ github.sha }}
@@ -32,7 +40,7 @@ jobs:
       az-password: ${{ secrets.STAGING_AZ_PASSWORD }}
       az-tenant: ${{ secrets.STAGING_AZ_TENANT }}
   main:
-    if: ${{ github.head_ref }} == 'main'
+    if: github.head_ref == 'main'
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-main:${{ github.sha }}
