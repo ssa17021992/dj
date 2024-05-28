@@ -13,7 +13,7 @@ on:
       - main
 
 jobs:
-  dev:
+  develop:
     if: github.ref == 'refs/heads/develop'
     uses: ./.github/workflows/deploy.yml
     with:
@@ -26,7 +26,7 @@ jobs:
       az-username: ${{ secrets.DEVELOP_AZ_USERNAME }}
       az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
       az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
-  stage:
+  staging:
     if: github.ref == 'refs/heads/staging'
     uses: ./.github/workflows/deploy.yml
     with:
