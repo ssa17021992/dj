@@ -13,11 +13,37 @@ on:
       - develop
 
 jobs:
+  dev:
+    if: ${{ github.head_ref }} == 'develop'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: app-dev:${{ github.sha }}
+      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.AZ_USERNAME }}
+      az-password: ${{ secrets.AZ_PASSWORD }}
+      az-tenant: ${{ secrets.AZ_TENANT }}
+  stage:
+    if: ${{ github.head_ref }} == 'staging'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      image-tag: app-stage:${{ github.sha }}
+      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.AZ_USERNAME }}
+      az-password: ${{ secrets.AZ_PASSWORD }}
+      az-tenant: ${{ secrets.AZ_TENANT }}
   main:
     if: ${{ github.head_ref }} == 'main'
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: app:${{ github.sha }}
+      image-tag: app-main:${{ github.sha }}
       resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
       acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
       containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
