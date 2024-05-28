@@ -1,0 +1,28 @@
+name: Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - develop
+  pull_request:
+    branches:
+      - main
+      - staging
+      - develop
+
+jobs:
+  deploy-main:
+    if: ${{ github.head_ref }} == 'main'
+    uses: ./.github/workflows/deploy
+    with:
+      image-tag: app:${{ github.sha }}
+      resource-group: ${{ vars.RESOURCE_GROUP || 'DEVOP' }}
+      acr-name: ${{ vars.ACR_NAME || 'conapi3bmicroservice' }}
+      containerapp-name: ${{ vars.CONTAINERAPP_NAME || 'app' }}
+      containerappjob-name: ${{ vars.CONTAINERAPPJOB_NAME || 'app' }}
+    secrets:
+      az-username: ${{ secrets.AZ_USERNAME }}
+      az-password: ${{ secrets.AZ_PASSWORD }}
+      az-tenant: ${{ secrets.AZ_TENANT }}
