@@ -44,7 +44,7 @@ jobs:
           tenant: ${{ secrets.az-tenant }}
       - uses: ./.github/actions/az-acr-push-image
         with:
-          acr-name: ${{ inputs.image-tag }}
+          acr-name: ${{ inputs.acr-name }}
           acr-image-tag: ${{ inputs.image-tag }}
       - uses: ./.github/actions/az-containerapp-set-image
         with:
