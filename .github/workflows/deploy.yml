@@ -20,13 +20,10 @@ on:
     secrets:
       az-username:
         required: true
-        type: string
       az-password:
         required: true
-        type: string
       az-tenant:
         required: true
-        type: string
 
 jobs:
   deploy:
