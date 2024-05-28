@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/build-docker-image
+      - uses: ./.github/actions/docker-build-image
         with:
           tag: "app:1.0"
-      - uses: ./.github/actions/test-docker-image
+      - uses: ./.github/actions/docker-test-image
         with:
           tag: "app:1.0"
       - uses: ./.github/actions/az-install
