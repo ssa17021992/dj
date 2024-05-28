@@ -1,0 +1,18 @@
+name: "Test Docker image"
+description: "Test Docker image"
+
+inputs:
+  image-tag:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Test Docker image ${{ inputs.image-tag }}
+      shell: bash
+      run: |
+        docker compose up postgres redis rabbitmq --detach --wait
+        sleep 5
+        echo $(docker compose up test-image) | grep -q "test-image-1 exited with code 0" || exit 1
+        docker compose down
