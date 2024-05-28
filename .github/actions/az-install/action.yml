@@ -9,6 +9,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/setup-python@v5
     - name: Install Azure CLI
       shell: bash
       run: |
