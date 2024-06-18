@@ -13,8 +13,8 @@ runs:
     - name: Install Google Cloud CLI
       shell: bash
       run: |
-        sudo apt-get install --yes google-cloud-cli-gke-gcloud-auth-plugin kubectl
+        sudo apt-get purge google-cloud-cli
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        # curl https://sdk.cloud.google.com > install.sh
-        # bash install.sh --disable-prompts
-        # . ~/.bashrc
+        curl https://sdk.cloud.google.com > install.sh
+        bash install.sh --disable-prompts
+        . ~/.bashrc
