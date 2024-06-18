@@ -21,7 +21,8 @@ runs:
     - name: Push Docker image to Google Cloud artifact registry
       shell: bash
       run: |
-        sdk/bin/gcloud auth configure-docker ${{ inputs.ar-name }}
+        export PATH="$PWD/gcp/bin:$PATH"
+        gcloud auth configure-docker ${{ inputs.ar-name }}
         docker image tag \
           ${{ inputs.ar-image-tag }} \
           ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}

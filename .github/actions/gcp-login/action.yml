@@ -15,6 +15,7 @@ runs:
     - name: Login Google Cloud CLI
       shell: bash
       run: |
+        export PATH="$PWD/gcp/bin:$PATH"
         echo -n "${{ inputs.b64-credentials }}" | base64 -d >/tmp/gcp.json
-        sdk/bin/gcloud auth activate-service-account --key-file /tmp/gcp.json
-        sdk/bin/gcloud config set project "${{ inputs.project }}"
+        gcloud auth activate-service-account --key-file /tmp/gcp.json
+        gcloud config set project "${{ inputs.project }}"
