@@ -13,6 +13,5 @@ runs:
     - name: Install Google Cloud CLI
       shell: bash
       run: |
-        wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${{ inputs.version }}-linux-x86_64.tar.gz -O cli.tar.xz
-        tar -xf cli.tar.xz
-        export PATH="$PWD/google-cloud-sdk/bin:$PATH"
+        curl https://sdk.cloud.google.com > install.sh
+        bash install.sh --disable-prompts
