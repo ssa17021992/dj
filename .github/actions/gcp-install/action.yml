@@ -13,7 +13,7 @@ runs:
     - name: Install Google Cloud CLI
       shell: bash
       run: |
+        sudo apt-get purge google-cloud-cli
         curl https://sdk.cloud.google.com > install.sh
         bash install.sh --disable-prompts
         . ~/.bashrc
-        export PATH="$HOME/google-cloud-sdk/bin:$PATH"
