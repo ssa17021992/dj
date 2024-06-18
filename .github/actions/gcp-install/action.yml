@@ -13,7 +13,7 @@ runs:
     - name: Install Google Cloud CLI
       shell: bash
       run: |
-        sudo apt-get remove google-cloud-sdk or sudo apt purge --autoremove google-cloud-sdk
+        sudo apt-get remove google-cloud-sdk
         curl https://sdk.cloud.google.com > install.sh
         bash install.sh --disable-prompts
         . ~/.bashrc
