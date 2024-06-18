@@ -18,6 +18,6 @@ runs:
         tar -xf cli.tar.gz
         rm cli.tar.gz
         mv google-cloud-sdk gcp
-        export PATH="$PWD/gcp/bin:$PATH"
+        export PATH=$PWD/gcp/bin:$PATH
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
         gcloud components install gke-gcloud-auth-plugin kubectl
