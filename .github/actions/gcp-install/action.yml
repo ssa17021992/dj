@@ -17,4 +17,5 @@ runs:
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
         curl https://sdk.cloud.google.com > install.sh
         bash install.sh --disable-prompts
-        . ~/.bashrc
+        bash ~/.bashrc
+        export PATH="$HOME/google-cloud-sdk/bin:$PATH"
