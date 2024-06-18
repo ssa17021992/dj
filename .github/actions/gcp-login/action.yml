@@ -2,6 +2,9 @@ name: "Login Google Cloud CLI"
 description: "Login Google Cloud CLI"
 
 inputs:
+  project:
+    required: true
+    type: string
   b64-credentials:
     required: true
     type: string
@@ -14,3 +17,4 @@ runs:
       run: |
         echo -n "${{ inputs.b64-credentials }}" | base64 -d >/tmp/gcp.json
         gcloud auth activate-service-account --key-file /tmp/gcp.json
+        gcloud config set project "${{ inputs.project }}"

@@ -45,6 +45,7 @@ jobs:
       - uses: ./.github/actions/gcp-install
       - uses: ./.github/actions/gcp-login
         with:
+          project: ${{ inputs.gcp-project }}
           b64-credentials: ${{ secrets.gcp-b64-credentials }}
       - uses: ./.github/actions/gcp-ar-push-image
         with:

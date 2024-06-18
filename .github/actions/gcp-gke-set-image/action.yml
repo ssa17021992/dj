@@ -33,7 +33,5 @@ runs:
     - name: Set Docker image to Google Cloud GKE deployment
       shell: bash
       run: |
-        # gcloud components install kubectl
-        sudo apt-get install --yes kubectl
         gcloud container clusters get-credentials --zone "${{ inputs.gke-zone }}" "${{ inputs.gke-cluster }}"
         kubectl set image deployment "${{ inputs.deployment }}" "${{ inputs.container }}=${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}"
