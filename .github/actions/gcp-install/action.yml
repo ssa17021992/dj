@@ -1,0 +1,18 @@
+name: "Install Google Cloud CLI"
+description: "Install Google Cloud CLI"
+
+inputs:
+  version:
+    required: false
+    type: string
+    default: "480.0.0"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Google Cloud CLI
+      shell: bash
+      run: |
+        wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${{ inputs.version }}-linux-x86_64.tar.gz -O cli.tar.xz
+        tar -xf cli.tar.xz
+        export PATH="$PWD/google-cloud-sdk/bin:$PATH"

@@ -6,24 +6,29 @@ on:
       image-tag:
         required: true
         type: string
-      resource-group:
+      gcp-project:
         required: true
         type: string
-      acr-name:
+      ar-name:
         required: true
         type: string
-      containerapp-name:
+      ar-repository:
         required: true
         type: string
-      containerappjob-name:
+      gke-cluster:
+        required: true
+        type: string
+      gke-zone:
+        required: true
+        type: string
+      gke-deployment:
+        required: true
+        type: string
+      gke-container:
         required: true
         type: string
     secrets:
-      az-username:
-        required: true
-      az-password:
-        required: true
-      az-tenant:
+      gcp-b64-credentials:
         required: true
 
 jobs:
@@ -37,25 +42,23 @@ jobs:
       - uses: ./.github/actions/docker-test-image
         with:
           image-tag: ${{ inputs.image-tag }}
-      - uses: ./.github/actions/az-install
-      - uses: ./.github/actions/az-login
+      - uses: ./.github/actions/gcp-install
+      - uses: ./.github/actions/gcp-login
         with:
-          username: ${{ secrets.az-username }}
-          password: ${{ secrets.az-password }}
-          tenant: ${{ secrets.az-tenant }}
-      - uses: ./.github/actions/az-acr-push-image
+          b64-credentials: ${{ secrets.gcp-b64-credentials }}
+      - uses: ./.github/actions/gcp-ar-push-image
         with:
-          acr-name: ${{ inputs.acr-name }}
-          acr-image-tag: ${{ inputs.image-tag }}
-      - uses: ./.github/actions/az-containerapp-set-image
+          ar-image-tag: ${{ inputs.image-tag }}
+          ar-name: ${{ inputs.ar-name }}
+          ar-project: ${{ inputs.gcp-project }}
+          ar-repository: ${{ inputs.ar-repository }}
+      - uses: ./.github/actions/gcp-gke-set-image
         with:
-          containerapp-resource-group: ${{ inputs.resource-group }}
-          containerapp-name: ${{ inputs.containerapp-name }}
-          acr-name: ${{ inputs.acr-name }}
-          acr-image-tag: ${{ inputs.image-tag }}
-      - uses: ./.github/actions/az-containerappjob-set-image
-        with:
-          containerappjob-resource-group: ${{ inputs.resource-group }}
-          containerappjob-name: ${{ inputs.containerappjob-name }}
-          acr-name: ${{ inputs.acr-name }}
-          acr-image-tag: ${{ inputs.image-tag }}
+          ar-image-tag: ${{ inputs.image-tag }}
+          ar-name: ${{ inputs.ar-name }}
+          ar-project: ${{ inputs.gcp-project }}
+          ar-repository: ${{ inputs.ar-repository }}
+          gke-cluster: ${{ inputs.gke-cluster }}
+          gke-zone: ${{ inputs.gke-zone }}
+          gke-deployment: ${{ inputs.gke-deployment }}
+          gke-container: ${{ inputs.gke-container }}

@@ -1,0 +1,34 @@
+name: "Push Docker image to Google Cloud artifact registry"
+description: "Push Docker image to Google Cloud artifact registry"
+
+inputs:
+  ar-image-tag:
+    required: true
+    type: string
+  ar-name:
+    required: true
+    type: string
+  ar-project:
+    required: true
+    type: string
+  ar-repository:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Push Docker image to Google Cloud artifact registry
+      shell: bash
+      run: |
+        gcloud auth configure-docker ${{ inputs.ar-name }}
+        docker image tag \
+          ${{ inputs.ar-image-tag }} \
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}
+        docker image push \
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}
+        docker image tag \
+          ${{ inputs.ar-image-tag }} \
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }} | cut -d":" -f1):latest
+        docker image push \
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }} | cut -d":" -f1):latest

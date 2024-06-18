@@ -1,0 +1,38 @@
+name: "Set Docker image to Google Cloud GKE deployment"
+description: "Set Docker image to Google Cloud GKE deployment"
+
+inputs:
+  ar-image-tag:
+    required: true
+    type: string
+  ar-name:
+    required: true
+    type: string
+  ar-project:
+    required: true
+    type: string
+  ar-repository:
+    required: true
+    type: string
+  gke-cluster:
+    required: true
+    type: string
+  gke-zone:
+    required: true
+    type: string
+  gke-deployment:
+    required: true
+    type: string
+  gke-container:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set Docker image to Google Cloud GKE deployment
+      shell: bash
+      run: |
+        gcloud components install kubectl
+        gcloud container clusters get-credentials --zone "${{ inputs.gke-zone }}" "${{ inputs.gke-cluster }}"
+        kubectl set image deployment "${{ inputs.deployment }}" "${{ inputs.container }}=${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}"

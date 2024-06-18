@@ -1,0 +1,16 @@
+name: "Login Google Cloud CLI"
+description: "Login Google Cloud CLI"
+
+inputs:
+  b64-credentials:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Login Google Cloud CLI
+      shell: bash
+      run: |
+        echo -n "${{ inputs.b64-credentials }}" | base64 -d >/tmp/gcp.json
+        gcloud auth activate-service-account --key-file /tmp/gcp.json

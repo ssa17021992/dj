@@ -18,37 +18,40 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       image-tag: app-dev:${{ github.sha }}
-      resource-group: ${{ vars.DEVELOP_RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.DEVELOP_ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.DEVELOP_CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.DEVELOP_CONTAINERAPPJOB_NAME || 'app' }}
+      gcp-project: ${{ vars.DEVELOP_GCP_PROJECT }}
+      ar-name: ${{ vars.DEVELOP_AR_NAME }}
+      ar-repository: ${{ vars.DEVELOP_AR_REPOSITORY }}
+      gke-cluster: ${{ vars.DEVELOP_GKE_CLUSTER }}
+      gke-zone: ${{ vars.DEVELOP_GKE_ZONE }}
+      gke-deployment: ${{ vars.DEVELOP_GKE_DEPLOYMENT }}
+      gke-container: ${{ vars.DEVELOP_GKE_CONTAINER }}
     secrets:
-      az-username: ${{ secrets.DEVELOP_AZ_USERNAME }}
-      az-password: ${{ secrets.DEVELOP_AZ_PASSWORD }}
-      az-tenant: ${{ secrets.DEVELOP_AZ_TENANT }}
+      gcp-b64-credentials: ${{ secrets.DEVELOP_GCP_B64_CREDENTIALS }}
   staging:
     if: github.ref == 'refs/heads/staging'
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: app-stage:${{ github.sha }}
-      resource-group: ${{ vars.STAGING_RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.STAGING_ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.STAGING_CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.STAGING_CONTAINERAPPJOB_NAME || 'app' }}
+      image-tag: app-dev:${{ github.sha }}
+      gcp-project: ${{ vars.STAGING_GCP_PROJECT }}
+      ar-name: ${{ vars.STAGING_AR_NAME }}
+      ar-repository: ${{ vars.STAGING_AR_REPOSITORY }}
+      gke-cluster: ${{ vars.STAGING_GKE_CLUSTER }}
+      gke-zone: ${{ vars.STAGING_GKE_ZONE }}
+      gke-deployment: ${{ vars.STAGING_GKE_DEPLOYMENT }}
+      gke-container: ${{ vars.STAGING_GKE_CONTAINER }}
     secrets:
-      az-username: ${{ secrets.STAGING_AZ_USERNAME }}
-      az-password: ${{ secrets.STAGING_AZ_PASSWORD }}
-      az-tenant: ${{ secrets.STAGING_AZ_TENANT }}
+      gcp-b64-credentials: ${{ secrets.STAGING_GCP_B64_CREDENTIALS }}
   main:
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
-      image-tag: app-main:${{ github.sha }}
-      resource-group: ${{ vars.MAIN_RESOURCE_GROUP || 'DEVOP' }}
-      acr-name: ${{ vars.MAIN_ACR_NAME || 'conapi3bmicroservice' }}
-      containerapp-name: ${{ vars.MAIN_CONTAINERAPP_NAME || 'app' }}
-      containerappjob-name: ${{ vars.MAIN_CONTAINERAPPJOB_NAME || 'app' }}
+      image-tag: app-dev:${{ github.sha }}
+      gcp-project: ${{ vars.MAIN_GCP_PROJECT }}
+      ar-name: ${{ vars.MAIN_AR_NAME }}
+      ar-repository: ${{ vars.MAIN_AR_REPOSITORY }}
+      gke-cluster: ${{ vars.MAIN_GKE_CLUSTER }}
+      gke-zone: ${{ vars.MAIN_GKE_ZONE }}
+      gke-deployment: ${{ vars.MAIN_GKE_DEPLOYMENT }}
+      gke-container: ${{ vars.MAIN_GKE_CONTAINER }}
     secrets:
-      az-username: ${{ secrets.MAIN_AZ_USERNAME }}
-      az-password: ${{ secrets.MAIN_AZ_PASSWORD }}
-      az-tenant: ${{ secrets.MAIN_AZ_TENANT }}
+      gcp-b64-credentials: ${{ secrets.MAIN_GCP_B64_CREDENTIALS }}
