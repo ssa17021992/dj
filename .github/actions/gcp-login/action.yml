@@ -18,6 +18,3 @@ runs:
         echo -n "${{ inputs.b64-credentials }}" | base64 -d >/tmp/gcp.json
         gcloud auth activate-service-account --key-file /tmp/gcp.json
         gcloud config set project "${{ inputs.project }}"
-        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        gcloud components update --quiet
-        gcloud components install gke-gcloud-auth-plugin kubectl
