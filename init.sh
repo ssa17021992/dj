@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-export ENV="${ENV:=web}"  # web, ws, beat, task, dev or test.
+export ENV="${ENV:=web+migrate}"  # web, ws, beat, task, shell, dev or test.
 export WORKERS="${WORKERS:=1}"
 export WORKER_CONNECTIONS="${WORKER_CONNECTIONS:=100}"
 export TASK_QUEUES="${TASK_QUEUES:=}"  # Example: q1, q2, q3.
@@ -11,11 +11,18 @@ echo $GCP_B64_CREDENTIALS | base64 -d >$GOOGLE_APPLICATION_CREDENTIALS
 
 . /venv/bin/activate
 
-echo $ENV | grep -q "web\|ws\|beat\|task\|dev" && \
+echo $ENV | grep -q "^migrate\$" && \
+    exec su -p app -c "python manage.py migrate"
+
+echo $ENV | grep -q "migrate" && \
     su -p app -c "python manage.py migrate" &
 
 rm -r /etc/nginx
 cp -r .docker/app/nginx /etc/nginx
+cp /etc/nginx/web.conf /etc/nginx/app.conf
+
+[ ! -d collectstatic ] && \
+    sed -e "s~/static~/not/collectstatic~g" -i /etc/nginx/app.conf
 
 [ -n "$TASK_QUEUES" ] && \
     TASK_ARGS="--queues ${TASK_QUEUES// /}"
@@ -23,14 +30,8 @@ cp -r .docker/app/nginx /etc/nginx
 [ -n "$TASK_EXCLUDE_QUEUES" ] && \
     TASK_ARGS="--exclude-queues ${TASK_EXCLUDE_QUEUES// /}"
 
-echo $ENV | grep -q "web" && \
-    cp .docker/app/nginx/web.conf /etc/nginx/app.conf
-
-echo $ENV | grep -q "dev" && \
-    cp .docker/app/nginx/dev.conf /etc/nginx/app.conf
-
 echo $ENV | grep -q "ws" && \
-    cp .docker/app/nginx/ws.conf /etc/nginx/app.conf
+    cp /etc/nginx/ws.conf /etc/nginx/app.conf
 
 sed -e "s~WORKERS~$WORKERS~g" \
     -e "s~WORKER_CONNECTIONS~$(($WORKER_CONNECTIONS * 2))~g" \
@@ -47,7 +48,7 @@ echo $ENV | grep -q "task" && \
         --events --pool gevent --concurrency $WORKER_CONNECTIONS \
         --uid app --gid app --loglevel INFO $TASK_ARGS
 
-echo $ENV | grep -q "web\|dev" && \
+echo $ENV | grep -q "web" && \
     su -p app -c "
         for x in \`seq 10\`
         do
@@ -59,9 +60,6 @@ echo $ENV | grep -q "web\|dev" && \
 
 echo $ENV | grep -q "web" && exec uwsgi --ini uwsgi.ini
 
-echo $ENV | grep -q "dev" && \
-    exec uwsgi --ini .docker/dev/uwsgi.ini --py-autoreload 1
-
 echo $ENV | grep -q "ws" && \
     exec su -p app -c "
         exec uvicorn conf.channels_asgi:application \
@@ -70,6 +68,11 @@ echo $ENV | grep -q "ws" && \
             --host 127.0.0.1 --port 2000 --log-level info \
             --lifespan off --no-server-header --ws-max-size 204800  # 200KB
     "
+
+echo $ENV | grep -q "shell" && exec top -d 31536000
+
+echo $ENV | grep -q "dev" && \
+    exec su -p app -c "python manage.py runserver 127.0.0.1:2000"
 
 echo $ENV | grep -q "test" && \
     exec su -p app -c "

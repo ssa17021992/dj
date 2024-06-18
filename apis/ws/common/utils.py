@@ -10,7 +10,14 @@ def ws_response(action=None, data=None, error=None):
         "data": data,
         "error": error,
     }
-    return json.dumps(data, ensure_ascii=False)
+    return json.dumps(
+        data,
+        separators=(
+            ",",
+            ":",
+        ),
+        ensure_ascii=False,
+    )
 
 
 def ws_data(action=None, data=None):

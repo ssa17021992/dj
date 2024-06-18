@@ -16,6 +16,7 @@ RUN apt-get update --yes \
                    -r requirements/db.freeze.txt \
                    -r requirements/server.freeze.txt \
                    -r requirements/ws.freeze.txt \
+    && python manage.py graphql_schema --out static/schema.graphql \
     && python manage.py collectstatic --no-input
 
 FROM debian:bookworm-slim AS final

@@ -13,7 +13,7 @@ djangorestframework==3.15.1
 
 # Graphene: Library for building GraphQL schemas/types fast and easily.
 graphene==3.3
-graphene-django==3.2.1
+graphene-django==3.2.2
 
 # Django cockroachdb: Django backend for CockroachDB.
 # django-cockroachdb==5.0
@@ -50,7 +50,7 @@ celery==5.4.0
 SQLAlchemy==2.0.29
 
 # Redis: In-memory data structure store, used as a database, cache and message broker.
-redis==5.0.4
+redis==5.0.6
 hiredis==2.3.2
 
 # Requests: Python HTTP for Humans.

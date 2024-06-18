@@ -1,4 +1,4 @@
-FROM alpine:3.19.1 AS build
+FROM alpine:3.20 AS build
 
 COPY . /app
 WORKDIR /app
@@ -16,6 +16,7 @@ RUN apk update --no-cache \
         -r requirements/db.freeze.txt \
         -r requirements/server.freeze.txt \
         -r requirements/ws.freeze.txt \
+    && python manage.py graphql_schema --out static/schema.graphql \
     && python manage.py collectstatic --no-input \
     && addgroup app \
     && adduser -s /bin/sh -D -G app app \
@@ -27,7 +28,7 @@ RUN apk update --no-cache \
         openssl-dev libpq-dev \
     && rm -rf /root/.cache /usr/local/share/.cache
 
-FROM alpine:3.19.1 AS final
+FROM alpine:3.20 AS final
 
 COPY --from=build / /
 WORKDIR /app

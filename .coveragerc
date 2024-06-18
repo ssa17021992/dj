@@ -6,7 +6,6 @@ source =
 omit =
     */migrations/*
     tests/*
-    runtests.py
 
 [report]
 skip_empty = true

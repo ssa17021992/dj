@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PI
   description: REST API.
-  version:
+  version: ''
 
 servers:
   - url: '{protocol}://{host}:{port}/pi/{version}'
@@ -136,7 +136,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#components/schemas/UpdateUser'
+            $ref: '#/components/schemas/UpdateUser'
     ChangeAvatar:
       content:
         multipart/form-data:
@@ -643,6 +643,7 @@ components:
         results:
           type: array
           items:
+            type: object
           description: Result list.
     CursorPagination:
       type: object
@@ -658,6 +659,7 @@ components:
         results:
           type: array
           items:
+            type: object
           description: Result list.
     Fruit:
       type: object

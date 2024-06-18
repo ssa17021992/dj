@@ -3,7 +3,7 @@
 gevent==24.2.1
 
 # uWSGI: The uWSGI server.
-uWSGI==2.0.25.1
+uWSGI==2.0.26
 
 # Psycogreen: psycopg2 integration with coroutine libraries.
 psycogreen==1.0.2

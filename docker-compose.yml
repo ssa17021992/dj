@@ -35,7 +35,7 @@ services:
     networks:
       - default
   pgb:
-    image: ssa17021992/pgb:1.18
+    image: ssa17021992/pgb:1.20
     environment:
       POOL_SIZE: "1"
       CONNECTIONS: "1000"
@@ -49,6 +49,40 @@ services:
       - "6432:6432"
     networks:
       - default
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      ENV: "shell"
+    env_file:
+      - .docker/dev/.env
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+  uwsgi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      ENV: "web + migrate"
+    env_file:
+      - .docker/dev/.env
+    ports:
+      - "2000:80"
+    networks:
+      - default
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
   dev:
     build:
       context: .
@@ -56,7 +90,7 @@ services:
     volumes:
       - .:/app
     environment:
-      ENV: "dev"
+      ENV: "dev + migrate"
     env_file:
       - .docker/dev/.env
     ports:
@@ -72,7 +106,8 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      ENV: "web"
+      ENV: "web + migrate"
+      DEBUG: "False"
       DB_HOST: "pgb"
       DB_PORT: "6432"
     env_file:
@@ -93,7 +128,7 @@ services:
     volumes:
       - .:/app
     environment:
-      ENV: "ws"
+      ENV: "ws + migrate"
     env_file:
       - .docker/dev/.env
     ports:
@@ -111,7 +146,7 @@ services:
     volumes:
       - .:/app
     environment:
-      ENV: "task"
+      ENV: "task + migrate"
     env_file:
       - .docker/dev/.env
     networks:

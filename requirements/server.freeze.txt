@@ -1,6 +1,6 @@
 gevent==24.2.1
 greenlet==3.0.3
 psycogreen==1.0.2
-uWSGI==2.0.25.1
+uWSGI==2.0.26
 zope.event==5.0
 zope.interface==6.1

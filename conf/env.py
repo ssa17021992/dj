@@ -256,6 +256,13 @@ CACHES_BACKENDS = {
 CACHES = CACHES_BACKENDS.get(props.CACHES_BACKEND)
 
 DB_BACKENDS = {
+    "dummy": {
+        "default": {
+            "ENGINE": "django.db.backends.dummy",
+            "NAME": props.DB_NAME or "db",
+            "CONN_MAX_AGE": props.DB_CONN_MAX_AGE,
+        },
+    },
     "sqlite3": {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
