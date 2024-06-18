@@ -29,6 +29,6 @@ runs:
           ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }}
         docker image tag \
           ${{ inputs.ar-image-tag }} \
-          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }} | cut -d":" -f1):latest
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/$(echo -n ${{ inputs.ar-image-tag }} | cut -d":" -f1):latest
         docker image push \
-          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/${{ inputs.ar-image-tag }} | cut -d":" -f1):latest
+          ${{ inputs.ar-name }}/${{ inputs.ar-project }}/${{ inputs.ar-repository }}/$(echo -n ${{ inputs.ar-image-tag }} | cut -d":" -f1):latest
