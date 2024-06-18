@@ -16,7 +16,7 @@ runs:
         # sudo apt-get purge google-cloud-cli
         wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${{ inputs.version }}-linux-x86_64.tar.gz -O cli.tar.gz
         tar -xf cli.tar.gz
-        rm cli.tar.xz
+        rm cli.tar.gz
         mv google-cloud-sdk gcp
         export PATH="$PWD/gcp/bin:$PATH"
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
